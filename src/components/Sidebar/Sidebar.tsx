@@ -1,18 +1,41 @@
-import styled from "styled-components";
-import Logo from "../../assets/kanban-logo.svg";
+import { useState } from "react";
+import { StyledSidebar, Logo } from "./Sidebar.styles";
+import SidebarBoardItem from "./SidebarBoardItem/SidebarBoardItem";
+import LogoEl from "../../assets/logo.svg";
 
-const StyledSidebar = styled.aside`
-  height: 100vh;
-  width: 300px;
-  position: absolute;
-  border-right: 1px solid #979797;
-  padding: 32px 0 32px 34px;
-`;
+const boards = [
+  { id: 1, name: "Platform Launch", tasks: [] },
+  { id: 2, name: "Product Development", tasks: [] },
+];
 
 function Sidebar() {
+  const [data, setData] = useState(boards);
+  const handleAddBoard = () => {
+    setData([
+      ...data,
+      {
+        id: data.length + 1,
+        name: `Board ${data.length + 1}`,
+        tasks: [],
+      },
+    ]);
+  };
+
   return (
     <StyledSidebar>
-      <img src={Logo} alt="Kanban Logo" />
+      <Logo src={LogoEl} alt="logo" />
+      <div>
+        <p style={{ marginBottom: "19px", marginLeft: "34px" }}>
+          All boards {boards.length}
+        </p>
+        {data.map((board) => (
+          <SidebarBoardItem key={board.id} text={board.name} $normal />
+        ))}
+        <SidebarBoardItem
+          text="+ Create new board"
+          onClick={() => handleAddBoard()}
+        />
+      </div>
     </StyledSidebar>
   );
 }
